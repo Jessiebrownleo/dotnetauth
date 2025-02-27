@@ -20,7 +20,6 @@ EXPOSE 5000
 
 # Set environment variables (overridden by docker-compose or env file)
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS=http://+:5000
 
 # Run the application
 ENTRYPOINT ["dotnet", "DotnetAuthentication.dll"]
