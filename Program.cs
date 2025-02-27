@@ -29,20 +29,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
-            ClockSkew = TimeSpan.Zero // Optional: Adjust if you encounter issues with expiration
+            ClockSkew = TimeSpan.Zero
         };
     });
 
-// Add CORS 
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://dotnetauthentication-ui.soben.me" };
+// Add CORS - Simplified with one clear policy
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? 
+    new[] { "https://dotnetauthentication-ui.soben.me" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("DefaultPolicy", policy =>
+    options.AddPolicy("CorsPolicy", policy =>
         policy.WithOrigins(allowedOrigins)
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials()); // Required for authenticated requests with cookies/headers
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials());
 });
+
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -64,7 +67,6 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer"
     });
 
-    // Apply the security definition to the API
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
@@ -90,23 +92,34 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
-// Middleware
+// Configure the middleware pipeline with correct order
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseHsts();
+}
+
+// CORS must be before auth but after developer exception page
+app.UseHttpsRedirection();
+
+// Apply CORS before routing and authentication
+app.UseCors("CorsPolicy");
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Swagger at the end
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "DotnetAuthentication API v1");
-    c.RoutePrefix = string.Empty; // Makes Swagger UI available at root (e.g., http://localhost:5000/)
+    c.RoutePrefix = string.Empty;
 });
 
-app.UseHsts();
-app.UseHttpsRedirection();
-app.UseCors(options => options
-    .WithOrigins(allowedOrigins)
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials());
-app.UseAuthentication();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
