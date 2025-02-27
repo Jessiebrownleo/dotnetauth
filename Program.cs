@@ -33,16 +33,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Add CORS - You may want to allow only specific domains in production
+// Add CORS 
 var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://dotnetauthentication-ui.soben.me" };
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DefaultPolicy", policy =>
-        policy.WithOrigins(allowedOrigins) // Allow specific origins
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials()); // Required for authenticated requests with cookies/headers
 });
-
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
