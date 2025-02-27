@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8102:5000"
+    depends_on:
+      - db
+    networks:
+      - soben-network
+
+networks:
+  soben-network:
+    driver: bridge
