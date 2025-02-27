@@ -33,12 +33,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://dotnetauthentication-ui.soben.me", "https://dotnetauthentication-ui.soben.me/register" };
 
 // Add Cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
-        policy.WithOrigins("https://dotnetauthentication-ui.soben.me") // ✅ Allow frontend origin
+        policy.WithOrigins(allowedOrigins) // ✅ Allow frontend origin
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()); // ⚠️ Remove this if using `AllowAnyOrigin()`

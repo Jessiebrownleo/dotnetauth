@@ -8,7 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91b274f7-3789-44b3-8219-e8a604c901c1" name="Changes" comment="" />
+    <list default="true" id="91b274f7-3789-44b3-8219-e8a604c901c1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -129,7 +131,7 @@
       <workItem from="1740598093201" duration="5200000" />
       <workItem from="1740624845574" duration="1514000" />
       <workItem from="1740626416746" duration="15994000" />
-      <workItem from="1740644903191" duration="2978000" />
+      <workItem from="1740644903191" duration="3537000" />
     </task>
     <servers />
   </component>
