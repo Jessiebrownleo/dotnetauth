@@ -1,19 +1,20 @@
-﻿# https://hub.docker.com/_/microsoft-dotnet
+﻿# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /source
 
-# copy csproj and restore as distinct layers
+# Copy solution and project files, then restore dependencies
 COPY *.sln .
-COPY aspnetapp/*.csproj ./aspnetapp/
+COPY DotnetAuthentication/*.csproj ./DotnetAuthentication/
 RUN dotnet restore
 
-# copy everything else and build app
-COPY aspnetapp/. ./aspnetapp/
-WORKDIR /source/aspnetapp
-RUN dotnet publish -c release -o /app --no-restore
+# Copy the rest of the application and build
+COPY DotnetAuthentication/. ./DotnetAuthentication/
+WORKDIR /source/DotnetAuthentication
+RUN dotnet publish -c Release -o /app --no-restore
 
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app ./
-ENTRYPOINT ["dotnet", "aspnetapp.dll"]
+EXPOSE 5000
+ENTRYPOINT ["dotnet", "DotnetAuthentication.dll"]
