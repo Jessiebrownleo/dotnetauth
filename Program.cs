@@ -34,14 +34,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-// allow all origins 
+// Add Cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
-        policy.AllowAnyOrigin()  // Allows requests from any origin
+        policy.WithOrigins("https://dotnetauthentication-ui.soben.me") // ✅ Allow frontend origin
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials()); // ⚠️ Remove this if using `AllowAnyOrigin()`
 });
+
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -100,13 +102,20 @@ else
 
 // CORS must be before auth but after developer exception page
 app.UseHttpsRedirection();
-
 // Apply CORS before routing and authentication
 app.UseCors("CorsPolicy");
-
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// ✅ Ensure CORS headers are included in the response
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Access-Control-Allow-Origin", "https://dotnetauthentication-ui.soben.me");
+    context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    await next();
+});
 
 // Swagger at the end
 app.UseSwagger();
