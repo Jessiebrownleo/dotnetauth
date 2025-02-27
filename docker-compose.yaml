@@ -2,16 +2,15 @@ version: '3.8'
 
 services:
   backend:
+    container_name: dotnetauth-backend
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
     ports:
       - "8102:5000"
-    depends_on:
-      - db
     networks:
       - soben-network
 
 networks:
   soben-network:
-    driver: bridge
+    external: true
