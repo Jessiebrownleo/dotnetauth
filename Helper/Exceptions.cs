@@ -3,6 +3,7 @@ namespace DotnetAuthentication.Helper;
 public class Exceptions : Exception
 {
     public int StatusCode { get; }
+
     public Exceptions(string message, int statusCode) : base(message)
     {
         StatusCode = statusCode;
@@ -13,5 +14,4 @@ public class Exceptions : Exception
     public static Exceptions Unauthorized(string message) => new Exceptions(message, 401);
     public static Exceptions Forbidden(string message) => new Exceptions(message, 403);
     public static Exceptions NotFound(string message) => new Exceptions(message, 404);
-    
 }

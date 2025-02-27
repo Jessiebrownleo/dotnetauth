@@ -33,7 +33,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://dotnetauthentication-ui.soben.me", "https://dotnetauthentication-ui.soben.me/register" };
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[]
+    { "https://dotnetauthentication-ui.soben.me", "https://dotnetauthentication-ui.soben.me/register" };
 
 // Add Cors
 builder.Services.AddCors(options =>

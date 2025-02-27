@@ -33,7 +33,8 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(double.Parse(_config["Jwt:RefreshTokenLifetimeDays"]));
         await _context.SaveChangesAsync();
 
-        return new UserResponse { Token = token, RefreshToken = user.RefreshToken, Email = user.Email, Username = user.Username };
+        return new UserResponse
+            { Token = token, RefreshToken = user.RefreshToken, Email = user.Email, Username = user.Username };
     }
 
     public async Task RegisterAsync(RegisterRequest request)
@@ -111,7 +112,8 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
 
         var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.soben.me";
-        var resetLink = $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(user.ResetPasswordToken)}";
+        var resetLink =
+            $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(user.ResetPasswordToken)}";
         var body = GenerateEmailTemplate(
             "Password Reset Request",
             $"Hello {user.Username},",
@@ -135,7 +137,7 @@ public class AuthService : IAuthService
         user.ResetPasswordTokenExpiry = null;
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task<UserResponse> GoogleLoginAsync(string idToken)
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings
@@ -167,7 +169,7 @@ public class AuthService : IAuthService
         else if (!string.IsNullOrEmpty(user.PasswordHash))
         {
             // Existing email/password user - prevent duplicate Google login
-            throw Exceptions.BadRequest("This email is already registered with an email/password account. Please use your password to log in or link your Google account.");
+            throw Exceptions.BadRequest("Login failed. Please check your credentials and try again.");
         }
         // If user exists and has no password (Google user), proceed with login
 
@@ -176,7 +178,8 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(double.Parse(_config["Jwt:RefreshTokenLifetimeDays"]));
         await _context.SaveChangesAsync();
 
-        return new UserResponse { Token = token, RefreshToken = user.RefreshToken, Email = user.Email, Username = user.Username };
+        return new UserResponse
+            { Token = token, RefreshToken = user.RefreshToken, Email = user.Email, Username = user.Username };
     }
 
     private string GenerateOtp()
@@ -192,7 +195,8 @@ public class AuthService : IAuthService
         return Convert.ToBase64String(bytes);
     }
 
-    private string GenerateEmailTemplate(string title, string greeting, string intro, string actionContent, string disclaimer)
+    private string GenerateEmailTemplate(string title, string greeting, string intro, string actionContent,
+        string disclaimer)
     {
         return $@"
             <!DOCTYPE html>
