@@ -146,8 +146,10 @@ public class AuthService : IAuthService
 
         var user = await _context.Users.Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Email == payload.Email);
+
         if (user == null)
         {
+            // New user - register them
             var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
             if (userRole == null) throw Exceptions.NotFound("Default 'User' role not found");
 
@@ -155,13 +157,19 @@ public class AuthService : IAuthService
             {
                 Username = payload.Email.Split('@')[0],
                 Email = payload.Email,
-                PasswordHash = "",
+                PasswordHash = "", // No password for Google users
                 RoleId = userRole.Id,
-                IsEmailVerified = true
+                IsEmailVerified = true // Google verifies email
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
         }
+        else if (!string.IsNullOrEmpty(user.PasswordHash))
+        {
+            // Existing email/password user - prevent duplicate Google login
+            throw Exceptions.BadRequest("This email is already registered with an email/password account. Please use your password to log in or link your Google account.");
+        }
+        // If user exists and has no password (Google user), proceed with login
 
         var token = JwtHelper.GenerateJwtToken(user, _config);
         user.RefreshToken = JwtHelper.GenerateRefreshToken();
