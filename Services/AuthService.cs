@@ -57,7 +57,7 @@ public class AuthService : IAuthService
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.cloudinator.cloud";
+        var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.soben.me";
         var body = GenerateEmailTemplate(
             "Email Verification",
             $"Hello {user.Username},",
@@ -77,7 +77,7 @@ public class AuthService : IAuthService
         user.EmailVerificationToken = GenerateOtp();
         await _context.SaveChangesAsync();
 
-        var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.cloudinator.cloud";
+        var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.soben.me";
         var body = GenerateEmailTemplate(
             "Email Verification",
             $"Hello {user.Username},",
@@ -110,7 +110,7 @@ public class AuthService : IAuthService
         user.ResetPasswordTokenExpiry = DateTime.UtcNow.AddHours(1);
         await _context.SaveChangesAsync();
 
-        var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.cloudinator.cloud";
+        var frontendUrl = _config["FrontendUrl"] ?? "https://dotnetauthentication-ui.soben.me";
         var resetLink = $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(user.ResetPasswordToken)}";
         var body = GenerateEmailTemplate(
             "Password Reset Request",
