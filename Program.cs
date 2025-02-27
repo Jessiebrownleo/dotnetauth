@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add CORS - You may want to allow only specific domains in production
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:5000" };
+var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://dotnetauthentication-ui.soben.me" };
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DefaultPolicy", policy =>
