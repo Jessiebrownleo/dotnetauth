@@ -35,7 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // Add CORS - Simplified with one clear policy
 var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? 
-    new[] { "https://dotnetauthentication-ui.soben.me" };
+    new[] { "https://dotnetauthentication-ui.soben.me/**" };
 
 builder.Services.AddCors(options =>
 {
