@@ -33,19 +33,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Add CORS - Simplified with one clear policy
-var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>() ?? 
-    new[] { "https://dotnetauthentication-ui.soben.me" };
 
+// allow all origins 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials());
+        policy.AllowAnyOrigin()  // Allows requests from any origin
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
-
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
