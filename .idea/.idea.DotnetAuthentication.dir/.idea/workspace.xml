@@ -9,9 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91b274f7-3789-44b3-8219-e8a604c901c1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DotnetAuthentication.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DotnetAuthentication.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DotnetAuthentication.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DotnetAuthentication.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +121,7 @@
       <workItem from="1740595310574" duration="2373000" />
       <workItem from="1740598093201" duration="5200000" />
       <workItem from="1740624845574" duration="1514000" />
-      <workItem from="1740626416746" duration="6505000" />
+      <workItem from="1740626416746" duration="8928000" />
     </task>
     <servers />
   </component>
